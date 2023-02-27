@@ -5,18 +5,23 @@ pipeline {
 	  jdk 'jdk-17'
 	}
     stages {
-      stage('Load Tools') {
+      stage('Initialize') {
         steps {
-        echo 'Loading Tools..'
+        echo 'Maven version..'
 	    bat "mvn -version"
       }
     }    
-    stage('maven install') {
+    stage('Build') {
       steps {
 
         bat 'mvn clean install'
 
       }
+      post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml' 
+                }
+      }	    
     }
 
   }
